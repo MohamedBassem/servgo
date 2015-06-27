@@ -1,8 +1,6 @@
 package main
 
-import (
-	"strings"
-)
+import "strings"
 
 var allowedMethods = map[string]bool{
 	"GET": true,
@@ -21,6 +19,7 @@ func (rq *Request) addHeader(key, val string) {
 
 func ParseRequest(requestLines []string) (*Request, error) {
 	var request Request
+	request.headers = make(map[string]string)
 	headerLineFields := strings.Fields(requestLines[0])
 	if len(headerLineFields) < 3 {
 		return nil, &UnparsableRequestError{"Error Parsing the Header Line"}
