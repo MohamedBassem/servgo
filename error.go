@@ -15,3 +15,11 @@ type NotAllowedMethodError struct {
 func (err *NotAllowedMethodError) Error() string {
 	return err.s
 }
+
+type NotFoundError struct {
+	s string
+}
+
+func (err *NotFoundError) Error() string {
+	return err.s
+}
