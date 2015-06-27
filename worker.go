@@ -18,7 +18,6 @@ func handleGetRequest(req *Request, server *Server) Response {
 	}
 	fullPath := server.rootDir + path
 	absPath, _ := filepath.Abs(fullPath)
-	println(fullPath, absPath, server.rootDir)
 	if !strings.HasPrefix(absPath, server.rootDir) {
 		return handleErrorResponse(&ForbiddenError{"403 Forbidden"})
 	}
