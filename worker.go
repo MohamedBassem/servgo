@@ -3,13 +3,23 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"time"
 )
 
-func handleGetRequest(req *Request) Response {
+func handleGetRequest(req *Request, server *Server) Response {
 	res := NewResponse()
-	res.setBody("Hello World")
+	path := req.path[1:]
+	if path == "" {
+		path = "index.html"
+	}
+
+	f, err := ioutil.ReadFile(server.rootDir + path)
+	if err != nil {
+		return handleErrorResponse(&NotFoundError{"File not found"})
+	}
+	res.setBody(string(f))
 	res.setStatusSuccess()
 	return res
 }
@@ -28,7 +38,7 @@ func handleErrorResponse(err error) Response {
 	return res
 }
 
-func worker(id int, requestQueue <-chan net.Conn) {
+func worker(id int, server *Server, requestQueue <-chan net.Conn) {
 	for {
 		cl := <-requestQueue
 		response := NewResponse()
@@ -59,10 +69,10 @@ func worker(id int, requestQueue <-chan net.Conn) {
 		} else {
 			switch request.method {
 			case "GET":
-				response = handleGetRequest(request)
+				response = handleGetRequest(request, server)
 				response.addServerHeaders(request.httpVersion)
 			case "HEAD":
-				response = handleGetRequest(request)
+				response = handleGetRequest(request, server)
 				response.addServerHeaders(request.httpVersion)
 				response.body = ""
 			}
