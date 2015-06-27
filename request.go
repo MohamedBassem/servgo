@@ -20,6 +20,9 @@ func (rq *Request) addHeader(key, val string) {
 func ParseRequest(requestLines []string) (*Request, error) {
 	var request Request
 	request.headers = make(map[string]string)
+	if len(requestLines) < 1 {
+		return nil, &UnparsableRequestError{"Error Parsing the Header Line"}
+	}
 	headerLineFields := strings.Fields(requestLines[0])
 	if len(headerLineFields) < 3 {
 		return nil, &UnparsableRequestError{"Error Parsing the Header Line"}
