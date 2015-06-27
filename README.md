@@ -22,10 +22,8 @@ Usage of ./goserve:
 $ ./goserve --root-dir example # Will start a server listening to port 8080 and serving files from the example directory
 ```
 
-### Thread Pools
-The server spawns `--num-workers` workers to serve the incoming requests.
-
 ### Notes
 - The server currently supports only `GET` and `HEAD` requests.
+- The server spawns `--num-workers` workers to serve the incoming requests.
 - If a file is not specified in the request path `index.html` is served.
 - Server logs are printed to stdout, if you want to log them to a file you can pipe them.
