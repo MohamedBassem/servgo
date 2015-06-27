@@ -30,7 +30,7 @@ func NewResponse() Response {
 func (res *Response) addServerHeaders(httpVersion string) {
 	res.headers["Date"] = time.Now().String()
 	res.headers["Content-Length"] = strconv.Itoa(len([]byte(res.body)))
-	res.headers["Server"] = "GoServe"
+	res.headers["Server"] = "Servgo"
 	res.httpVersion = httpVersion
 }
 
