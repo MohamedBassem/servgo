@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"net"
+	"time"
 )
 
 func handleGetRequest(req *Request) Response {
@@ -51,6 +52,11 @@ func worker(id int, requestQueue <-chan net.Conn) {
 			} else {
 				response.addServerHeaders(request.httpVersion)
 			}
+			if len(requestLines) > 0 {
+				fmt.Printf("%v [%v] %v : '%v' %v %v\n", cl.RemoteAddr, time.Now().String(), cl.LocalAddr, requestLines[0], response.status, response.headers["Content-Length"])
+			} else {
+				fmt.Printf("%v [%v] %v : '%v' %v %v\n", cl.RemoteAddr, time.Now().String(), cl.LocalAddr, "Error Parsing Request", response.status, response.headers["Content-Length"])
+			}
 		} else {
 			switch request.method {
 			case "GET":
@@ -61,6 +67,7 @@ func worker(id int, requestQueue <-chan net.Conn) {
 				response.addServerHeaders(request.httpVersion)
 				response.body = ""
 			}
+			fmt.Printf("%v [%v] %v : '%v %v' %v %v\n", cl.RemoteAddr, time.Now().String(), cl.LocalAddr, request.method, request.path, response.status, response.headers["Content-Length"])
 		}
 		cl.Write(response.toByteSlice())
 		cl.Close()
