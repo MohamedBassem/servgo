@@ -1,4 +1,4 @@
-# GoServe
+# Servgo
 A simple HTTP server for static websites written from scratch with thread pools.
 
 ### Why?
@@ -7,19 +7,19 @@ I decided to write this very simple HTTP server from scratch without using any e
 ### Installation
 The server doesn't need any external packages, just `go get` this repo and you are ready to go.
 ```bash
-go get github.com/MohamedBassem/goserve
+go get github.com/MohamedBassem/servgo
 ```
 
 ### Usage
 ```bash
-$ goserve -h
-Usage of ./goserve:
+$ servgo -h
+Usage of ./servgo
 -addr=":8080": The port to which the server will listen
 -max-queued=1024: [Optional] The maximum number of connections that can be queued in the server
 -num-workers=2: [Optional] Number of workers serving the requests
 -root-dir="nil": [Required] The root dir for serving the files
 
-$ goserve --root-dir example # Will start a server listening to port 8080 and serving files from the example directory
+$ servgo --root-dir example # Will start a server listening to port 8080 and serving files from the example directory
 ```
 
 ### Notes
