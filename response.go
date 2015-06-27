@@ -33,20 +33,8 @@ func (res *Response) addServerHeaders(httpVersion string) {
 	res.httpVersion = httpVersion
 }
 
-func (res *Response) setStatusSuccess() {
-	res.status = 200
-}
-
-func (res *Response) setStatusNotFound() {
-	res.status = 404
-}
-
-func (res *Response) setStatusBadRequest() {
-	res.status = 400
-}
-
-func (res *Response) setStatusNotAllowedMethod() {
-	res.status = 405
+func (res *Response) setStatusCode(code int) {
+	res.status = code
 }
 
 func (res *Response) addHeader(key, val string) {

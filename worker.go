@@ -20,7 +20,7 @@ func handleGetRequest(req *Request, server *Server) Response {
 		return handleErrorResponse(&NotFoundError{"File not found"})
 	}
 	res.setBody(string(f))
-	res.setStatusSuccess()
+	res.setStatusCode(200)
 	return res
 }
 
@@ -29,11 +29,11 @@ func handleErrorResponse(err error) Response {
 	res.setBody(err.Error())
 	switch err.(type) {
 	case *UnparsableRequestError:
-		res.setStatusBadRequest()
+		res.setStatusCode(400)
 	case *NotAllowedMethodError:
-		res.setStatusNotAllowedMethod()
+		res.setStatusCode(405)
 	case *NotFoundError:
-		res.setStatusNotFound()
+		res.setStatusCode(404)
 	}
 	return res
 }
