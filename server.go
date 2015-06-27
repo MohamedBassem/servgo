@@ -12,11 +12,13 @@ type Server struct {
 
 func main() {
 	var addr = flag.String("addr", ":8080", "The server's port")
+	flag.Parse()
 
 	ln, err := net.Listen("tcp", *addr)
 	if err != nil {
 		fmt.Println(err)
 	}
+	fmt.Printf("Server is listening to %v\n", *addr)
 
 	var requestQueue = make(chan net.Conn, 1024)
 	for i := 0; i < 8; i++ {
