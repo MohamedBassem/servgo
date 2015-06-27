@@ -12,6 +12,8 @@ type Server struct {
 
 func main() {
 	var addr = flag.String("addr", ":8080", "The server's port")
+	var maxQueuedConnecions = flag.Int("max-queued", 1024, "The maximum number of connections that can be queued in the server")
+	var numberOfWorkers = flag.Int("num-workers", 2, "Number of workers serving the requests")
 	flag.Parse()
 
 	ln, err := net.Listen("tcp", *addr)
@@ -20,8 +22,8 @@ func main() {
 	}
 	fmt.Printf("Server is listening to %v\n", *addr)
 
-	var requestQueue = make(chan net.Conn, 1024)
-	for i := 0; i < 8; i++ {
+	var requestQueue = make(chan net.Conn, *maxQueuedConnecions)
+	for i := 0; i < *numberOfWorkers; i++ {
 		go worker(i, requestQueue)
 	}
 
