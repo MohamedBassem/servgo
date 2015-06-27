@@ -13,7 +13,7 @@ go get github.com/MohamedBassem/goserve
 ```bash
 $ ./goserve -h
 Usage of ./goserve:
--addr=":8080": The server's port
+-addr=":8080": The port to which the server will listen
 -max-queued=1024: [Optional] The maximum number of connections that can be queued in the server
 -num-workers=2: [Optional] Number of workers serving the requests
 -root-dir="nil": [Required] The root dir for serving the files
