@@ -5,6 +5,7 @@ A simple HTTP server for static websites written from scratch with thread pools.
 I decided to write this very simple HTTP server from scratch without using any external packages or the core http library just to learn Go.
 
 ### Installation
+The server doesn't need any external packages, just `go get` this repo and you are ready to go.
 ```bash
 go get github.com/MohamedBassem/goserve
 ```
