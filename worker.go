@@ -31,7 +31,6 @@ func handleErrorResponse(err error) Response {
 func worker(id int, requestQueue <-chan net.Conn) {
 	for {
 		cl := <-requestQueue
-		fmt.Printf("A new request is handled by worker %v\n", id)
 		response := NewResponse()
 
 		reader := bufio.NewReader(cl)
@@ -53,9 +52,9 @@ func worker(id int, requestQueue <-chan net.Conn) {
 				response.addServerHeaders(request.httpVersion)
 			}
 			if len(requestLines) > 0 {
-				fmt.Printf("%v [%v] %v : '%v' %v %v\n", cl.RemoteAddr, time.Now().String(), cl.LocalAddr, requestLines[0], response.status, response.headers["Content-Length"])
+				fmt.Printf("Worker %v: %v [%v] : '%v' %v %v\n", id, cl.RemoteAddr(), time.Now().String(), requestLines[0], response.status, response.headers["Content-Length"])
 			} else {
-				fmt.Printf("%v [%v] %v : '%v' %v %v\n", cl.RemoteAddr, time.Now().String(), cl.LocalAddr, "Error Parsing Request", response.status, response.headers["Content-Length"])
+				fmt.Printf("Worker %v: %v [%v]: '%v' %v %v\n", id, cl.RemoteAddr(), time.Now().String(), "Error Parsing Request", response.status, response.headers["Content-Length"])
 			}
 		} else {
 			switch request.method {
@@ -67,7 +66,7 @@ func worker(id int, requestQueue <-chan net.Conn) {
 				response.addServerHeaders(request.httpVersion)
 				response.body = ""
 			}
-			fmt.Printf("%v [%v] %v : '%v %v' %v %v\n", cl.RemoteAddr, time.Now().String(), cl.LocalAddr, request.method, request.path, response.status, response.headers["Content-Length"])
+			fmt.Printf("Worker %v: %v [%v] : '%v %v' %v %v\n", id, cl.RemoteAddr(), time.Now().String(), request.method, request.path, response.status, response.headers["Content-Length"])
 		}
 		cl.Write(response.toByteSlice())
 		cl.Close()
