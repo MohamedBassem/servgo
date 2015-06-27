@@ -3,7 +3,8 @@ package main
 import "strings"
 
 var allowedMethods = map[string]bool{
-	"GET": true,
+	"GET":  true,
+	"HEAD": true,
 }
 
 type Request struct {
