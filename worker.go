@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -13,6 +15,12 @@ func handleGetRequest(req *Request, server *Server) Response {
 	path := req.path[1:]
 	if path == "" {
 		path = "index.html"
+	}
+	fullPath := server.rootDir + path
+	absPath, _ := filepath.Abs(fullPath)
+	println(fullPath, absPath, server.rootDir)
+	if !strings.HasPrefix(absPath, server.rootDir) {
+		return handleErrorResponse(&ForbiddenError{"403 Forbidden"})
 	}
 
 	f, err := ioutil.ReadFile(server.rootDir + path)
@@ -34,6 +42,8 @@ func handleErrorResponse(err error) Response {
 		res.setStatusCode(405)
 	case *NotFoundError:
 		res.setStatusCode(404)
+	case *ForbiddenError:
+		res.setStatusCode(403)
 	}
 	return res
 }

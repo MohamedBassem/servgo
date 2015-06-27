@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"path/filepath"
 )
 
 type Server struct {
@@ -34,6 +35,7 @@ func main() {
 		fmt.Println("A --root-dir must be given and valid.")
 		os.Exit(1)
 	}
+	*rootDir, _ = filepath.Abs(*rootDir)
 
 	if string(*rootDir)[len(*rootDir)-1:] != "/" {
 		*rootDir += "/"

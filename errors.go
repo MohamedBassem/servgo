@@ -23,3 +23,11 @@ type NotFoundError struct {
 func (err *NotFoundError) Error() string {
 	return err.s
 }
+
+type ForbiddenError struct {
+	s string
+}
+
+func (err *ForbiddenError) Error() string {
+	return err.s
+}
