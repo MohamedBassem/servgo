@@ -9,7 +9,7 @@ var statusReason = map[int]string{
 	200: "OK",
 	400: "Bad Request",
 	404: "Not Found",
-	405: "Not Allowed Method",
+	405: "Method Not Allowed",
 }
 
 type Response struct {
@@ -46,7 +46,7 @@ func (res *Response) setStatusBadRequest() {
 }
 
 func (res *Response) setStatusNotAllowedMethod() {
-	res.status = 400
+	res.status = 405
 }
 
 func (res *Response) addHeader(key, val string) {
