@@ -52,7 +52,7 @@ func worker(id int, requestQueue <-chan net.Conn) {
 				response.addServerHeaders(request.httpVersion)
 			}
 		} else {
-			switch request.requestMethod {
+			switch request.method {
 			case "GET":
 				response = handleGetRequest(request)
 				response.addServerHeaders(request.httpVersion)

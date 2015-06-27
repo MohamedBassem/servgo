@@ -7,10 +7,10 @@ var allowedMethods = map[string]bool{
 }
 
 type Request struct {
-	requestMethod string
-	requestPath   string
-	httpVersion   string
-	headers       map[string]string
+	method      string
+	path        string
+	httpVersion string
+	headers     map[string]string
 }
 
 func (rq *Request) addHeader(key, val string) {
@@ -27,11 +27,11 @@ func ParseRequest(requestLines []string) (*Request, error) {
 	if len(headerLineFields) < 3 {
 		return nil, &UnparsableRequestError{"Error Parsing the Header Line"}
 	}
-	request.requestMethod = headerLineFields[0]
-	request.requestPath = headerLineFields[1]
+	request.method = headerLineFields[0]
+	request.path = headerLineFields[1]
 	request.httpVersion = headerLineFields[2]
 
-	if !allowedMethods[request.requestMethod] {
+	if !allowedMethods[request.method] {
 		return nil, &NotAllowedMethodError{"Method is not allowed"}
 	}
 
