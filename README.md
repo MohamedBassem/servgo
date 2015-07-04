@@ -22,7 +22,7 @@ go get github.com/MohamedBassem/servgo/servgo
 
 #### The Library
 You can check the executable's source code to know how to use it: 
-(https://github.com/MohamedBassem/servgo/blob/master/servgo/main.go)[https://github.com/MohamedBassem/servgo/blob/master/servgo/main.go]
+[https://github.com/MohamedBassem/servgo/blob/master/servgo/main.go](https://github.com/MohamedBassem/servgo/blob/master/servgo/main.go)
 
 #### The executable
 ```bash
