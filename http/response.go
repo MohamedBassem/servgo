@@ -1,4 +1,4 @@
-package main
+package servgo
 
 import (
 	"strconv"
@@ -27,6 +27,19 @@ func NewResponse() Response {
 	return res
 }
 
+func NewStringResponse(msg string) Response {
+	res := NewResponse()
+	res.SetBody(msg)
+	return res
+}
+
+func NewErrorResponse(code int, msg string) Response {
+	res := NewResponse()
+	res.status = code
+	res.body = msg
+	return res
+}
+
 func (res *Response) addServerHeaders(httpVersion string) {
 	res.headers["Date"] = time.Now().String()
 	res.headers["Content-Length"] = strconv.Itoa(len([]byte(res.body)))
@@ -34,15 +47,15 @@ func (res *Response) addServerHeaders(httpVersion string) {
 	res.httpVersion = httpVersion
 }
 
-func (res *Response) setStatusCode(code int) {
+func (res *Response) SetStatusCode(code int) {
 	res.status = code
 }
 
-func (res *Response) addHeader(key, val string) {
+func (res *Response) AddHeader(key, val string) {
 	res.headers[key] = val
 }
 
-func (res *Response) setBody(body string) {
+func (res *Response) SetBody(body string) {
 	res.body = body
 }
 

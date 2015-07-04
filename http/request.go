@@ -1,11 +1,6 @@
-package main
+package servgo
 
 import "strings"
-
-var allowedMethods = map[string]bool{
-	"GET":  true,
-	"HEAD": true,
-}
 
 type Request struct {
 	method      string
@@ -18,7 +13,23 @@ func (rq *Request) addHeader(key, val string) {
 	rq.headers[key] = val
 }
 
-func ParseRequest(requestLines []string) (*Request, error) {
+func (rq *Request) Path() string {
+	return rq.path
+}
+
+func (rq *Request) Headers() map[string]string {
+	return rq.headers
+}
+
+func (rq *Request) Method() string {
+	return rq.method
+}
+
+func (rq *Request) HTTPVersion() string {
+	return rq.httpVersion
+}
+
+func parseRequest(requestLines []string) (*Request, error) {
 	var request Request
 	request.headers = make(map[string]string)
 	if len(requestLines) < 1 {
@@ -31,10 +42,6 @@ func ParseRequest(requestLines []string) (*Request, error) {
 	request.method = headerLineFields[0]
 	request.path = headerLineFields[1]
 	request.httpVersion = headerLineFields[2]
-
-	if !allowedMethods[request.method] {
-		return nil, &NotAllowedMethodError{"Method is not allowed"}
-	}
 
 	for i := 1; i < len(requestLines); i++ {
 		tmp := strings.Split(requestLines[i], ":")

@@ -1,51 +1,11 @@
-package main
+package servgo
 
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"net"
-	"path/filepath"
-	"strings"
 	"time"
 )
-
-func handleGetRequest(req *Request, server *Server) Response {
-	res := NewResponse()
-	path := req.path[1:]
-	if path == "" {
-		path = "index.html"
-	}
-	fullPath := server.rootDir + path
-	absPath, _ := filepath.Abs(fullPath)
-	if !strings.HasPrefix(absPath, server.rootDir) {
-		return handleErrorResponse(&ForbiddenError{"403 Forbidden"})
-	}
-
-	f, err := ioutil.ReadFile(server.rootDir + path)
-	if err != nil {
-		return handleErrorResponse(&NotFoundError{"File not found"})
-	}
-	res.setBody(string(f))
-	res.setStatusCode(200)
-	return res
-}
-
-func handleErrorResponse(err error) Response {
-	res := NewResponse()
-	res.setBody(err.Error())
-	switch err.(type) {
-	case *UnparsableRequestError:
-		res.setStatusCode(400)
-	case *NotAllowedMethodError:
-		res.setStatusCode(405)
-	case *NotFoundError:
-		res.setStatusCode(404)
-	case *ForbiddenError:
-		res.setStatusCode(403)
-	}
-	return res
-}
 
 func worker(id int, server *Server, requestQueue <-chan net.Conn) {
 	for {
@@ -62,9 +22,9 @@ func worker(id int, server *Server, requestQueue <-chan net.Conn) {
 			requestLines = append(requestLines, string(buffer))
 		}
 
-		request, err := ParseRequest(requestLines)
+		request, err := parseRequest(requestLines)
 		if err != nil {
-			response = handleErrorResponse(err)
+			response = NewErrorResponse(400, err.Error())
 			if request == nil {
 				response.addServerHeaders("HTTP/1.1")
 			} else {
@@ -78,12 +38,22 @@ func worker(id int, server *Server, requestQueue <-chan net.Conn) {
 		} else {
 			switch request.method {
 			case "GET":
-				response = handleGetRequest(request, server)
+				if server.GetHandler() == nil {
+					response = NewErrorResponse(405, "Method Not Allowed")
+				} else {
+					response = server.GetHandler()(*request)
+				}
 				response.addServerHeaders(request.httpVersion)
 			case "HEAD":
-				response = handleGetRequest(request, server)
+				if server.GetHandler() == nil {
+					response = NewErrorResponse(405, "Method Not Allowed")
+				} else {
+					response = server.GetHandler()(*request)
+					response.body = ""
+				}
 				response.addServerHeaders(request.httpVersion)
-				response.body = ""
+			default:
+				response = NewErrorResponse(405, "Method Not Allowed")
 			}
 			fmt.Printf("Worker %v: %v [%v] : '%v %v' %v %v\n", id, cl.RemoteAddr(), time.Now().String(), request.method, request.path, response.status, response.headers["Content-Length"])
 		}
