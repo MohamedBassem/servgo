@@ -21,7 +21,21 @@ go get github.com/MohamedBassem/servgo/servgo
 ### Usage
 
 #### The Library
-You can check the executable's source code to know how to use it: 
+Using the library is very simple:
+
+```go
+  server := servgo.NewServer(*addr, *numberOfWorkers, *maxQueuedConnecions)
+	server.SetGetHandler(handleGetRequest)
+	err := server.Run()
+```
+
+and the handler is a function with the following signature:
+
+```go
+  func handleGetRequest(req servgo.Request) servgo.Response
+```
+
+You can check the executable's source code for an example: 
 [https://github.com/MohamedBassem/servgo/blob/master/servgo/main.go](https://github.com/MohamedBassem/servgo/blob/master/servgo/main.go)
 
 #### The executable
