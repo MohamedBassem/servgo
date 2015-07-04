@@ -24,7 +24,7 @@ go get github.com/MohamedBassem/servgo/servgo
 Using the library is very simple:
 
 ```go
-  server := servgo.NewServer(*addr, *numberOfWorkers, *maxQueuedConnecions)
+  server := servgo.NewServer(address, numberOfWorkers, maxQueuedConnecions)
 	server.SetGetHandler(handleGetRequest)
 	err := server.Run()
 ```
