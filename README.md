@@ -25,8 +25,8 @@ Using the library is very simple:
 
 ```go
   server := servgo.NewServer(address, numberOfWorkers, maxQueuedConnecions)
-	server.SetGetHandler(handleGetRequest)
-	err := server.Run()
+  server.SetGetHandler(handleGetRequest)
+  err := server.Run()
 ```
 
 and the handler is a function with the following signature:
