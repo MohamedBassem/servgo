@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MohamedBassem/servgo/http"
+	"github.com/MohamedBassem/servgo"
 )
 
 var rootDir string
